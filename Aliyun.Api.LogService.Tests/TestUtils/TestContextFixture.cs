@@ -30,6 +30,9 @@ namespace Aliyun.Api.LogService.Tests.TestUtils
 {
     public class TestContextFixture
     {
+        private readonly Boolean isCiBuild;
+        public Boolean IsCiBuild => this.isCiBuild;
+
         public ILogServiceClient Client { get; }
 
         public Boolean ShouldInitProject { get; set; }
@@ -69,15 +72,16 @@ namespace Aliyun.Api.LogService.Tests.TestUtils
             this.ConfigName = $"config-dotnet-sdk-test-{timestamp}";
             this.ShipperName = "shipper-dotnet-sdk-test";
 
-            var (accessKey, accessSecret) = LoadCredential();
+            Boolean.TryParse(Environment.GetEnvironmentVariable("CI"), out this.isCiBuild);
+            var (accessKey, accessSecret) = this.LoadCredential();
             this.Client = LogServiceClientBuilders.HttpBuilder
                 .Endpoint("https://cn-qingdao.log.aliyuncs.com", this.ProjectName)
                 .Credential(accessKey, accessSecret)
                 .Build();
         }
 
-        private static (String, String) LoadCredential()
-            => Boolean.TryParse(Environment.GetEnvironmentVariable("CI"), out var isCi) && isCi
+        private (String, String) LoadCredential()
+            => this.IsCiBuild
                 ? (Environment.GetEnvironmentVariable("access_key"), Environment.GetEnvironmentVariable("access_secret"))
                 : ("<secret>", "<secret>");
     }
