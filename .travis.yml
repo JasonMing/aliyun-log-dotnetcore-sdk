@@ -9,4 +9,4 @@ install:
 script:
   - dotnet clean
   - dotnet build -c Release
-  - dotnet test  -c Release -v detailed --filter "Skip!=true" Aliyun.Api.LogService.Tests/Aliyun.Api.LogService.Tests.csproj
+  - dotnet test  -c Release -v normal --filter "Skip!=true" Aliyun.Api.LogService.Tests/Aliyun.Api.LogService.Tests.csproj
