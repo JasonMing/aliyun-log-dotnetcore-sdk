@@ -120,7 +120,18 @@ namespace Aliyun.Api.LogService.Tests
 
 
             var serializeObject = JsonConvert.SerializeObject(printObject, Settings);
-            this.output.WriteLine(serializeObject);
+            this.WriteLine(serializeObject);
+        }
+
+        private void WriteLine(String text)
+        {
+            if (this.context.IsCiBuild)
+            {
+                Console.WriteLine(text);
+            } else
+            {
+                this.output.WriteLine(text);
+            }
         }
 
         [Fact, TestPriority(nameof(TestCreateLogStore))]
@@ -139,7 +150,7 @@ namespace Aliyun.Api.LogService.Tests
                 var result = await this.context.Client.GetCursorAsync(this.context.LogStoreName, shardId, "begin");
                 if (result.IsSuccess)
                 {
-                    this.output.WriteLine(
+                    this.WriteLine(
                         $"{DateTime.Now} [{successCount}] - LogStore created verify ok, cursor was read, shardId={shardId}, cursor={result.Result.Cursor}.");
                     // Require cotinued success 10 times.
                     if (++successCount >= 10)
@@ -162,7 +173,7 @@ namespace Aliyun.Api.LogService.Tests
         {
             if (!this.context.ShouldInit)
             {
-                this.output.WriteLine("Test is skipped!");
+                this.WriteLine("Test is skipped!");
                 return;
             }
 
@@ -206,7 +217,7 @@ namespace Aliyun.Api.LogService.Tests
         {
             if (!this.context.ShouldClean)
             {
-                this.output.WriteLine("Test is skipped!");
+                this.WriteLine("Test is skipped!");
                 return;
             }
 
@@ -277,7 +288,7 @@ namespace Aliyun.Api.LogService.Tests
         {
             if (!this.context.ShouldTestShipper)
             {
-                this.output.WriteLine("Skipped!");
+                this.WriteLine("Skipped!");
                 return;
             }
 
@@ -300,7 +311,7 @@ namespace Aliyun.Api.LogService.Tests
                     break;
                 }
 
-                this.output.WriteLine($"[{DateTimeOffset.UtcNow}] Try {i} times, retry after 10 seconds");
+                this.WriteLine($"[{DateTimeOffset.UtcNow}] Try {i} times, retry after 10 seconds");
                 await Task.Delay(TimeSpan.FromSeconds(10));
                 i++;
             } while (DateTimeOffset.UtcNow - begin < TimeSpan.FromSeconds(330));
@@ -316,7 +327,7 @@ namespace Aliyun.Api.LogService.Tests
         {
             if (!this.context.ShouldTestShipper)
             {
-                this.output.WriteLine("Skipped!");
+                this.WriteLine("Skipped!");
                 return;
             }
 
@@ -337,7 +348,7 @@ namespace Aliyun.Api.LogService.Tests
         {
             if (!this.context.ShouldInit)
             {
-                this.output.WriteLine("Test is skipped!");
+                this.WriteLine("Test is skipped!");
                 return;
             }
 
@@ -480,7 +491,7 @@ namespace Aliyun.Api.LogService.Tests
         {
             if (!this.context.ShouldInit)
             {
-                this.output.WriteLine("Test is skipped!");
+                this.WriteLine("Test is skipped!");
                 return;
             }
 
@@ -497,7 +508,7 @@ namespace Aliyun.Api.LogService.Tests
         {
             if (!this.context.ShouldClean)
             {
-                this.output.WriteLine("Test is skipped!");
+                this.WriteLine("Test is skipped!");
                 return;
             }
 
@@ -582,7 +593,7 @@ namespace Aliyun.Api.LogService.Tests
         {
             if (!this.context.ShouldInit)
             {
-                this.output.WriteLine("Test is skipped!");
+                this.WriteLine("Test is skipped!");
                 return;
             }
 
@@ -634,7 +645,7 @@ namespace Aliyun.Api.LogService.Tests
         {
             if (!this.context.ShouldClean)
             {
-                this.output.WriteLine("Test is skipped!");
+                this.WriteLine("Test is skipped!");
                 return;
             }
 
@@ -680,7 +691,7 @@ namespace Aliyun.Api.LogService.Tests
         {
             if (!this.context.ShouldInitProject)
             {
-                this.output.WriteLine("Test is skipped!");
+                this.WriteLine("Test is skipped!");
                 return;
             }
 
@@ -711,7 +722,7 @@ namespace Aliyun.Api.LogService.Tests
         {
             if (!this.context.ShouldCleanProject)
             {
-                this.output.WriteLine("Test is skipped!");
+                this.WriteLine("Test is skipped!");
                 return;
             }
 
